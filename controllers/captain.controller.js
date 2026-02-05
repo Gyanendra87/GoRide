@@ -69,3 +69,29 @@ module.exports.loginCaptain=async(req,res)=>{
         res.status(500).json({ error: error.message });
     }
 }
+
+module.exports.getCaptainProfile=async(req,res,next)=>{
+    try{
+        const captain=req.captain;
+        res.status(200).json({
+            captain
+        });
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+module.exports.logoutCaptain=async(req,res)=>{
+    try{
+        const token=req.cookies.token || req.headers.authorization.split(" ")[1];   
+        await Blacklist.create({token});
+        
+        res.clearCookie('token');
+        res.status(200).json({message:"Logout successful"});
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+};
