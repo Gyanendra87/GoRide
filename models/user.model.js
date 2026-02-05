@@ -24,14 +24,14 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// 🔐 HASH PASSWORD BEFORE SAVE
+// 🔐 HASH PASSWORD BEFORE SAVE automatically hashes the user’s password before saving it to the database.
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-// 🔑 JWT TOKEN
+// 🔑    Creates a JSON Web Token  \\ JWT TOKEN ou’re adding a custom method to the User model that generates a JWT token for a user.
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     { id: this._id },
